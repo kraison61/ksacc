@@ -19,6 +19,28 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Service extends Model
 {
+    /**
+     * Icons an editor can assign to a service.
+     *
+     * @var array<string, string>
+     */
+    public const ICONS = [
+        'book' => 'สมุดบัญชี',
+        'building' => 'อาคาร',
+        'calendar' => 'ปฏิทิน',
+        'chart' => 'กราฟ',
+        'file' => 'เอกสาร',
+        'document' => 'แฟ้มเอกสาร',
+        'message' => 'ข้อความ',
+        'phone' => 'โทรศัพท์',
+        'users' => 'ผู้คน',
+        'shield' => 'ความปลอดภัย',
+        'clock' => 'นาฬิกา',
+        'check' => 'เครื่องหมายถูก',
+        'info' => 'ข้อมูล',
+        'upload' => 'อัปโหลด',
+    ];
+
     /** @use HasFactory<ServiceFactory> */
     use HasFactory;
 
@@ -43,16 +65,6 @@ class Service extends Model
     protected function ordered(Builder $query): void
     {
         $query->orderBy('sort_order')->orderBy('id');
-    }
-
-    public function resolveRouteBinding($value, $field = null): ?Model
-    {
-        $field ??= $this->getRouteKeyName();
-
-        return static::query()
-            ->where($field, $value)
-            ->published()
-            ->first();
     }
 
     public function getRouteKeyName(): string

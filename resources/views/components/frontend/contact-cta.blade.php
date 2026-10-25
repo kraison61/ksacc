@@ -1,5 +1,6 @@
 @php
     $lineUrl = config('company.line_url') ?: '#contact';
+    $tracksLine = filled(config('company.line_url'));
     $lineId = config('company.line_id');
     $phone = config('company.phone');
     $phoneDisplay = config('company.phone_display') ?: $phone;
@@ -16,10 +17,22 @@
                 ปรึกษาฟรี ไม่มีข้อผูกมัด ทักมาเล่าลักษณะกิจการ เราประเมินราคาให้ภายในวันเดียว
             </p>
             <div class="flex flex-wrap justify-center gap-3 pt-2">
-                <x-frontend.button :href="$lineUrl" variant="primary" icon="line">
+                <x-frontend.button
+                    :href="$lineUrl"
+                    variant="primary"
+                    icon="line"
+                    :data-contact-track="$tracksLine ? 'line' : null"
+                    :target="$tracksLine ? '_blank' : null"
+                    :rel="$tracksLine ? 'noopener noreferrer' : null"
+                >
                     แอด LINE {{ $lineId ? '@'.$lineId : 'ปรึกษาฟรี' }}
                 </x-frontend.button>
-                <x-frontend.button :href="$telHref" variant="secondary" icon="phone">
+                <x-frontend.button
+                    :href="$telHref"
+                    variant="secondary"
+                    icon="phone"
+                    :data-contact-track="filled($phone) ? 'phone' : null"
+                >
                     โทร {{ $phoneDisplay ?: 'สอบถาม' }}
                 </x-frontend.button>
             </div>

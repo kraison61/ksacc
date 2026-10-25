@@ -29,6 +29,16 @@ class PricingPlan extends Model
 
     public const TYPE_A_LA_CARTE = 'a_la_carte';
 
+    /**
+     * Price list sections an editor can assign.
+     *
+     * @var array<string, string>
+     */
+    public const TYPES = [
+        self::TYPE_PACKAGE => 'แพ็กเกจ',
+        self::TYPE_A_LA_CARTE => 'บริการแยกชิ้น',
+    ];
+
     /** @use HasFactory<PricingPlanFactory> */
     use HasFactory;
 
@@ -67,5 +77,10 @@ class PricingPlan extends Model
     protected function ordered(Builder $query): void
     {
         $query->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

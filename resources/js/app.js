@@ -49,3 +49,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('click', (event) => {
+    const link = event.target instanceof Element
+        ? event.target.closest('[data-contact-track]')
+        : null;
+
+    if (! link) {
+        return;
+    }
+
+    const endpoint = document.querySelector('meta[name="contact-clicks-url"]')?.getAttribute('content');
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const channel = link.getAttribute('data-contact-track');
+
+    if (! endpoint || ! token || (channel !== 'phone' && channel !== 'line')) {
+        return;
+    }
+
+    const body = new FormData();
+    body.append('_token', token);
+    body.append('channel', channel);
+    body.append('page_url', window.location.href);
+
+    const sent = typeof navigator.sendBeacon === 'function' && navigator.sendBeacon(endpoint, body);
+
+    if (! sent) {
+        fetch(endpoint, {
+            method: 'POST',
+            body,
+            credentials: 'same-origin',
+            keepalive: true,
+        });
+    }
+});

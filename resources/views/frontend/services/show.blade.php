@@ -1,6 +1,7 @@
 @php
     $pageTitle = $service->title.' — '.config('company.name');
     $lineUrl = config('company.line_url') ?: route('home').'#contact';
+    $tracksLine = filled(config('company.line_url'));
     $phone = config('company.phone');
     $phoneDisplay = config('company.phone_display') ?: $phone;
     $telHref = $phone ? 'tel:'.$phone : route('home').'#contact';
@@ -33,10 +34,22 @@
                 </p>
 
                 <div class="flex flex-wrap gap-3 pt-2">
-                    <x-frontend.button :href="$lineUrl" variant="primary" icon="line">
+                    <x-frontend.button
+                        :href="$lineUrl"
+                        variant="primary"
+                        icon="line"
+                        :data-contact-track="$tracksLine ? 'line' : null"
+                        :target="$tracksLine ? '_blank' : null"
+                        :rel="$tracksLine ? 'noopener noreferrer' : null"
+                    >
                         แอด LINE ปรึกษาฟรี
                     </x-frontend.button>
-                    <x-frontend.button :href="$telHref" variant="secondary" icon="phone">
+                    <x-frontend.button
+                        :href="$telHref"
+                        variant="secondary"
+                        icon="phone"
+                        :data-contact-track="filled($phone) ? 'phone' : null"
+                    >
                         โทร {{ $phoneDisplay ?: 'สอบถาม' }}
                     </x-frontend.button>
                 </div>

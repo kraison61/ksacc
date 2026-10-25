@@ -1,6 +1,8 @@
 @php
-    $phoneDisplay = config('company.phone_display') ?: config('company.phone');
+    $phone = config('company.phone');
+    $phoneDisplay = config('company.phone_display') ?: $phone;
     $lineId = config('company.line_id');
+    $lineUrl = config('company.line_url');
     $address = config('company.address') ?: implode(' ', config('company.address_lines', []));
 @endphp
 
@@ -15,14 +17,18 @@
 
         <div class="flex flex-col gap-1">
             <span>
-                @if ($phoneDisplay)
-                    โทร {{ $phoneDisplay }}
+                @if ($phoneDisplay && $phone)
+                    <a href="tel:{{ $phone }}" class="text-inherit no-underline hover:text-white" data-contact-track="phone">โทร {{ $phoneDisplay }}</a>
+                @elseif ($phoneDisplay)
+                    <span>โทร {{ $phoneDisplay }}</span>
                 @endif
                 @if ($phoneDisplay && $lineId)
                     ·
                 @endif
-                @if ($lineId)
-                    LINE {{ '@'.$lineId }}
+                @if ($lineId && filled($lineUrl))
+                    <a href="{{ $lineUrl }}" class="text-inherit no-underline hover:text-white" data-contact-track="line" target="_blank" rel="noopener noreferrer">LINE {{ '@'.$lineId }}</a>
+                @elseif ($lineId)
+                    <span>LINE {{ '@'.$lineId }}</span>
                 @endif
             </span>
             @if (config('company.office_hours'))

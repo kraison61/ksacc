@@ -1,5 +1,6 @@
 @php
     $lineUrl = config('company.line_url') ?: '#contact';
+    $tracksLine = filled(config('company.line_url'));
     $navLinks = [
         ['href' => route('home').'#services', 'label' => 'บริการ'],
         ['href' => route('home').'#pricing', 'label' => 'ราคา'],
@@ -36,6 +37,9 @@
                     icon="line"
                     :icon-size="18"
                     class="shrink-0"
+                    :data-contact-track="$tracksLine ? 'line' : null"
+                    :target="$tracksLine ? '_blank' : null"
+                    :rel="$tracksLine ? 'noopener noreferrer' : null"
                 >
                     แอด LINE
                 </x-frontend.button>
@@ -57,7 +61,15 @@
                 @foreach ($navLinks as $link)
                     <a href="{{ $link['href'] }}" class="py-2.5 text-navy no-underline hover:text-navy-hover">{{ $link['label'] }}</a>
                 @endforeach
-                <x-frontend.button :href="$lineUrl" variant="pill" icon="line" :icon-size="18">
+                <x-frontend.button
+                    :href="$lineUrl"
+                    variant="pill"
+                    icon="line"
+                    :icon-size="18"
+                    :data-contact-track="$tracksLine ? 'line' : null"
+                    :target="$tracksLine ? '_blank' : null"
+                    :rel="$tracksLine ? 'noopener noreferrer' : null"
+                >
                     แอด LINE
                 </x-frontend.button>
             </nav>
