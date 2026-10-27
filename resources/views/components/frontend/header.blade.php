@@ -41,7 +41,7 @@
                     :target="$tracksLine ? '_blank' : null"
                     :rel="$tracksLine ? 'noopener noreferrer' : null"
                 >
-                    แอด LINE
+                    แอดไลน์
                 </x-frontend.button>
 
                 <button
@@ -70,7 +70,7 @@
                     :target="$tracksLine ? '_blank' : null"
                     :rel="$tracksLine ? 'noopener noreferrer' : null"
                 >
-                    แอด LINE
+                    แอดไลน์
                 </x-frontend.button>
             </nav>
         </x-frontend.container>

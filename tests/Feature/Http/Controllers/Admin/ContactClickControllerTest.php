@@ -111,11 +111,31 @@ class ContactClickControllerTest extends TestCase
 
     public function test_index_explains_when_line_oa_is_not_configured(): void
     {
+        config([
+            'services.line.channel_access_token' => null,
+            'services.line.channel_secret' => null,
+            'services.line.recipient_id' => null,
+        ]);
+
         $this->actingAs(User::factory()->create())
             ->get(route('admin.contact-clicks.index'))
             ->assertOk()
             ->assertSee('ยังไม่ได้ตั้งค่า LINE OA')
             ->assertSee('ยังไม่มีการคลิกโทรหรือแอด LINE')
+            ->assertSee(route('line.webhook'));
+    }
+
+    public function test_index_explains_when_line_token_exists_without_recipients(): void
+    {
+        config([
+            'services.line.channel_access_token' => 'test-token',
+            'services.line.recipient_id' => null,
+        ]);
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('admin.contact-clicks.index'))
+            ->assertOk()
+            ->assertSee('ตั้งค่าโทเค็นแล้ว แต่ยังไม่มีผู้รับแจ้งเตือน')
             ->assertSee(route('line.webhook'));
     }
 

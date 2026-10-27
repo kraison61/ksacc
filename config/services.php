@@ -39,6 +39,8 @@ return [
         'channel_access_token' => env('LINE_CHANNEL_ACCESS_TOKEN'),
         'channel_secret' => env('LINE_CHANNEL_SECRET'),
         'recipient_id' => env('LINE_RECIPIENT_ID'),
+        // Optional CA bundle path for local PHP builds that lack a default trust store.
+        'ca_bundle' => env('CURL_CA_BUNDLE'),
     ],
 
 ];

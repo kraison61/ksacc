@@ -22,18 +22,27 @@ class HomePageTest extends TestCase
             'title' => 'แพ็กเกจทดสอบ',
             'type' => PricingPlan::TYPE_PACKAGE,
             'is_published' => true,
+            'cta_label' => 'สอบถามราคา',
         ]);
+
+        config(['company.line_url' => 'https://lin.ee/example']);
 
         $response = $this->get(route('home'));
 
         $response->assertOk();
         $response->assertSee('หจก. เกษมสุขวัฒนกิจ', false);
-        $response->assertSee('แอด LINE', false);
+        $response->assertSee('แอดไลน์', false);
         $response->assertSee('เปิดเมนู', false);
         $response->assertSee('data-nav-toggle', false);
         $response->assertSee('data-nav-backdrop', false);
         $response->assertSee('ทำบัญชีรายเดือน', false);
         $response->assertSee('แพ็กเกจทดสอบ', false);
+        $response->assertSeeInOrder([
+            'แพ็กเกจทดสอบ',
+            'href="https://lin.ee/example"',
+            'data-contact-track="line"',
+            'สอบถามราคา',
+        ], false);
         $response->assertSee('application/ld+json', false);
         $response->assertSee('"@type":"AccountingService"', false);
         $response->assertSee('"@type":"ItemList"', false);

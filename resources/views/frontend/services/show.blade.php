@@ -42,11 +42,11 @@
                         :target="$tracksLine ? '_blank' : null"
                         :rel="$tracksLine ? 'noopener noreferrer' : null"
                     >
-                        แอด LINE ปรึกษาฟรี
+                        แอดไลน์
                     </x-frontend.button>
                     <x-frontend.button
                         :href="$telHref"
-                        variant="secondary"
+                        variant="call"
                         icon="phone"
                         :data-contact-track="filled($phone) ? 'phone' : null"
                     >

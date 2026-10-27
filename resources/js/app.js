@@ -51,11 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
     const link = event.target instanceof Element
-        ? event.target.closest('[data-contact-track]')
+        ? event.target.closest('a[data-contact-track]')
         : null;
 
-    if (! link) {
+    if (! (link instanceof HTMLAnchorElement)) {
         return;
     }
 
@@ -67,19 +71,43 @@ document.addEventListener('click', (event) => {
         return;
     }
 
+    event.preventDefault();
+
+    if (link.dataset.contactTrackPending === '1') {
+        return;
+    }
+
+    link.dataset.contactTrackPending = '1';
+
     const body = new FormData();
     body.append('_token', token);
     body.append('channel', channel);
     body.append('page_url', window.location.href);
 
-    const sent = typeof navigator.sendBeacon === 'function' && navigator.sendBeacon(endpoint, body);
+    const openTrackedLink = () => {
+        delete link.dataset.contactTrackPending;
 
-    if (! sent) {
-        fetch(endpoint, {
-            method: 'POST',
-            body,
-            credentials: 'same-origin',
-            keepalive: true,
+        if (link.target === '_blank') {
+            window.open(link.href, '_blank', 'noopener,noreferrer');
+
+            return;
+        }
+
+        window.location.assign(link.href);
+    };
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 5000);
+
+    fetch(endpoint, {
+        method: 'POST',
+        body,
+        credentials: 'same-origin',
+        signal: controller.signal,
+    })
+        .catch(() => {})
+        .finally(() => {
+            window.clearTimeout(timeout);
+            openTrackedLink();
         });
-    }
 });

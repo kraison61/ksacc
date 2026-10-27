@@ -6,6 +6,8 @@
     $featured = (bool) $plan->is_featured;
     $features = $plan->features ?? [];
     $lastFeatureIsNote = ! $featured && count($features) > 0 && str_contains((string) end($features), 'ไม่รวม');
+    $lineUrl = config('company.line_url') ?: route('home').'#contact';
+    $tracksLine = filled(config('company.line_url'));
 @endphp
 
 <article
@@ -74,9 +76,12 @@
 
     @if ($plan->cta_label)
         <x-frontend.button
-            href="{{ route('home') }}#contact"
+            :href="$lineUrl"
             :variant="$featured ? 'primary' : 'outline'"
             class="{{ $featured ? 'font-bold' : '' }}"
+            :data-contact-track="$tracksLine ? 'line' : null"
+            :target="$tracksLine ? '_blank' : null"
+            :rel="$tracksLine ? 'noopener noreferrer' : null"
         >
             {{ $plan->cta_label }}
         </x-frontend.button>

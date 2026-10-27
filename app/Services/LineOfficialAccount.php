@@ -195,12 +195,19 @@ class LineOfficialAccount
         }
 
         try {
-            $response = Http::withToken($token)
+            $request = Http::withToken($token)
                 ->acceptJson()
                 ->asJson()
                 ->connectTimeout(3)
-                ->timeout(8)
-                ->post($endpoint, $payload);
+                ->timeout(8);
+
+            $caBundle = config('services.line.ca_bundle');
+
+            if (is_string($caBundle) && $caBundle !== '' && is_file($caBundle)) {
+                $request = $request->withOptions(['verify' => $caBundle]);
+            }
+
+            $response = $request->post($endpoint, $payload);
         } catch (ConnectionException) {
             Log::warning('LINE OA request failed to connect.', [
                 'endpoint' => $endpoint,

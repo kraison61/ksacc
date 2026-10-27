@@ -103,6 +103,7 @@ TEXT;
 
     public function test_click_is_stored_without_calling_line_when_oa_is_not_configured(): void
     {
+        $this->withoutLine();
         Http::preventStrayRequests();
 
         $this->postClick('line', 'http://localhost/#contact')->assertNoContent();
@@ -164,6 +165,7 @@ TEXT;
 
     public function test_contact_clicks_are_rate_limited(): void
     {
+        $this->withoutLine();
         Http::preventStrayRequests();
 
         for ($attempt = 0; $attempt < 30; $attempt++) {
@@ -238,6 +240,15 @@ TEXT;
         Http::preventStrayRequests();
         Http::fake([
             'https://api.line.me/*' => $response ?? Http::response([], 200),
+        ]);
+    }
+
+    private function withoutLine(): void
+    {
+        config([
+            'services.line.channel_access_token' => null,
+            'services.line.channel_secret' => null,
+            'services.line.recipient_id' => null,
         ]);
     }
 }

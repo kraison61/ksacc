@@ -1,7 +1,6 @@
 @php
     $lineUrl = config('company.line_url') ?: '#contact';
     $tracksLine = filled(config('company.line_url'));
-    $lineId = config('company.line_id');
     $phone = config('company.phone');
     $phoneDisplay = config('company.phone_display') ?: $phone;
     $telHref = $phone ? 'tel:'.$phone : '#contact';
@@ -25,11 +24,11 @@
                     :target="$tracksLine ? '_blank' : null"
                     :rel="$tracksLine ? 'noopener noreferrer' : null"
                 >
-                    แอด LINE {{ $lineId ? '@'.$lineId : 'ปรึกษาฟรี' }}
+                    แอดไลน์
                 </x-frontend.button>
                 <x-frontend.button
                     :href="$telHref"
-                    variant="secondary"
+                    variant="call"
                     icon="phone"
                     :data-contact-track="filled($phone) ? 'phone' : null"
                 >

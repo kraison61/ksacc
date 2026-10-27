@@ -23,7 +23,7 @@ class ContactClickController extends Controller
             'user_agent' => $userAgent === '' ? null : $userAgent,
         ]);
 
-        NotifyLineOfContactClick::dispatch($click)->afterResponse();
+        NotifyLineOfContactClick::dispatchSync($click);
 
         return response()->noContent();
     }
